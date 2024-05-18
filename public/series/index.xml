@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Series on ThomasBoom89 Blog</title>
+    <link>https://blog.reinventorofwheel.de/series/</link>
+    <description>Recent content in Series on ThomasBoom89 Blog</description>
+    <generator>Hugo</generator>
+    <language>de</language>
+    <copyright>ThomasBoom89</copyright>
+    <atom:link href="https://blog.reinventorofwheel.de/series/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
