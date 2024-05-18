@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>de</language>
     <copyright>ThomasBoom89</copyright>
-    <lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 May 2024 11:51:29 +0200</lastBuildDate>
     <atom:link href="https://blog.reinventorofwheel.de/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Just a Test</title>
+      <link>https://blog.reinventorofwheel.de/posts/just-a-test/</link>
+      <pubDate>Sat, 18 May 2024 11:51:29 +0200</pubDate>
+      <guid>https://blog.reinventorofwheel.de/posts/just-a-test/</guid>
+      <description></description>
+    </item>
     <item>
       <title></title>
       <link>https://blog.reinventorofwheel.de/search/_index.es/</link>
