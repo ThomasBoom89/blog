@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>First on ThomasBoom89 Blog</title>
+    <link>https://blog.reinventorofwheel.de/tags/first/</link>
+    <description>Recent content in First on ThomasBoom89 Blog</description>
+    <generator>Hugo</generator>
+    <language>de</language>
+    <copyright>ThomasBoom89</copyright>
+    <lastBuildDate>Sat, 25 May 2024 19:24:18 +0200</lastBuildDate>
+    <atom:link href="https://blog.reinventorofwheel.de/tags/first/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Willkommen auf meinem Blog!</title>
+      <link>https://blog.reinventorofwheel.de/about/</link>
+      <pubDate>Sat, 25 May 2024 14:00:00 +0200</pubDate>
+      <guid>https://blog.reinventorofwheel.de/about/</guid>
+      <description>Einleitung Hallo! Schön, dass du es auf meinen Blog geschafft hast!&#xA;Hier wird es in unregelmäßigen Abständen Posts zu technischen Themen geben.&#xA;Art und Umfang Die Posts kommen aus meinem beruflichen Alltag, der Arbeit an Nebenprojekten, meinem Home-Server/Smart-Home, aus dem Maker Bereich und was mir sonst noch so einfällt. Der Umfang der Posts wird variieren. Mal ist es nur eine technische Nuance, mal ein sehr ausgearbeiteter Post zu einem großen Thema.</description>
+    </item>
+  </channel>
+</rss>

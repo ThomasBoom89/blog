@@ -7,13 +7,20 @@
     <generator>Hugo</generator>
     <language>de</language>
     <copyright>ThomasBoom89</copyright>
-    <lastBuildDate>Sat, 18 May 2024 11:51:29 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 25 May 2024 19:24:18 +0200</lastBuildDate>
     <atom:link href="https://blog.reinventorofwheel.de/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Just a Test</title>
-      <link>https://blog.reinventorofwheel.de/posts/just-a-test/</link>
-      <pubDate>Sat, 18 May 2024 11:51:29 +0200</pubDate>
-      <guid>https://blog.reinventorofwheel.de/posts/just-a-test/</guid>
+      <title>Willkommen auf meinem Blog!</title>
+      <link>https://blog.reinventorofwheel.de/about/</link>
+      <pubDate>Sat, 25 May 2024 14:00:00 +0200</pubDate>
+      <guid>https://blog.reinventorofwheel.de/about/</guid>
+      <description>Einleitung Hallo! Schön, dass du es auf meinen Blog geschafft hast!&#xA;Hier wird es in unregelmäßigen Abständen Posts zu technischen Themen geben.&#xA;Art und Umfang Die Posts kommen aus meinem beruflichen Alltag, der Arbeit an Nebenprojekten, meinem Home-Server/Smart-Home, aus dem Maker Bereich und was mir sonst noch so einfällt. Der Umfang der Posts wird variieren. Mal ist es nur eine technische Nuance, mal ein sehr ausgearbeiteter Post zu einem großen Thema.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://blog.reinventorofwheel.de/search/_index.en/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://blog.reinventorofwheel.de/search/_index.en/</guid>
       <description></description>
     </item>
     <item>
