@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>ThomasBoom89 Blog</title>
+    <title>ReinventorOfWheel Blog</title>
     <link>https://blog.reinventorofwheel.de/</link>
-    <description>Recent content on ThomasBoom89 Blog</description>
+    <description>Recent content on ReinventorOfWheel Blog</description>
     <generator>Hugo</generator>
     <language>de</language>
-    <copyright>ThomasBoom89</copyright>
-    <lastBuildDate>Sat, 25 May 2024 19:45:12 +0200</lastBuildDate>
+    <copyright>ReinventorOfWheel</copyright>
+    <lastBuildDate>Wed, 01 Jan 2025 01:00:00 +0100</lastBuildDate>
     <atom:link href="https://blog.reinventorofwheel.de/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>38c3 Recap</title>
+      <link>https://blog.reinventorofwheel.de/posts/38c3-recap/</link>
+      <pubDate>Wed, 01 Jan 2025 01:00:00 +0100</pubDate>
+      <guid>https://blog.reinventorofwheel.de/posts/38c3-recap/</guid>
+      <description>&lt;h2 id=&#34;vorwort&#34;&gt;Vorwort&lt;/h2&gt;&#xA;&lt;p&gt;Hier ein kurzes Recap von meinem Aufenthalt auf dem 38C3.&#xA;Ich habe ja im &lt;a href=&#34;https://www.twitch.tv/reinventorofwheel&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Livestream&lt;/a&gt;&#xA; schon im Detail darüber gesprochen, deswegen komme&#xA;ich hier ausnahmsweise mal direkt auf den Punkt.&lt;/p&gt;&#xA;&lt;h2 id=&#34;eindrücke&#34;&gt;Eindrücke&lt;/h2&gt;&#xA;&lt;p&gt;Grundsätzlich kann ich sagen, dass ich mich richtig auf den Kongress gefreut habe. Ich verbinde das mit&#xA;unterschiedlichen anderen positiven Dingen in meinem Leben. Egal ob nun LAN-Partys, als Jungendlicher am PC&#xA;herumbasteln, Programmieren damit irgendwas blinkt, Upsis im Internet und noch vieles mehr, all das kommt hier zusammen.&#xA;Die Kreaturen sind im Regelfall sehr aufgeschlossen und erzählen einem Stolz etwas über ihr Projekt.&#xA;Man entdeckt jeden Tag etwas Neues, kein Rundgang ist wie der andere.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Willkommen auf meinem Blog!</title>
       <link>https://blog.reinventorofwheel.de/about/</link>
       <pubDate>Sat, 25 May 2024 14:00:00 +0200</pubDate>
       <guid>https://blog.reinventorofwheel.de/about/</guid>
-      <description>Einleitung Hallo! Schön, dass du es auf meinen Blog geschafft hast!&#xA;Hier wird es in unregelmäßigen Abständen Posts zu technischen Themen geben.&#xA;Art und Umfang Die Posts kommen aus meinem beruflichen Alltag, der Arbeit an Nebenprojekten, meinem Home-Server/Smart-Home, aus dem Maker Bereich und was mir sonst noch so einfällt. Der Umfang der Posts wird variieren. Mal ist es nur eine technische Nuance, mal ein sehr ausgearbeiteter Post zu einem großen Thema.</description>
+      <description>&lt;h2 id=&#34;einleitung&#34;&gt;Einleitung&lt;/h2&gt;&#xA;&lt;p&gt;Hallo! Schön, dass du es auf meinen Blog geschafft hast!&lt;br&gt;&#xA;Hier wird es in unregelmäßigen Abständen Posts zu technischen Themen geben.&lt;/p&gt;&#xA;&lt;h2 id=&#34;art-und-umfang&#34;&gt;Art und Umfang&lt;/h2&gt;&#xA;&lt;p&gt;Die Posts kommen aus meinem beruflichen Alltag, der Arbeit an Nebenprojekten, meinem Home-Server/Smart-Home, aus dem&#xA;Maker Bereich und was mir sonst noch so einfällt. Der Umfang der Posts wird variieren. Mal ist es nur eine technische&#xA;Nuance, mal ein sehr ausgearbeiteter Post zu einem großen Thema. Dadurch entstehen auch die unregelmäßigen Abstände.&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
