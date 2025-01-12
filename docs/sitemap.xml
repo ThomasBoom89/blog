@@ -2,6 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog.reinventorofwheel.de/posts/</loc>
+    <lastmod>2025-01-12T10:30:00+02:00</lastmod>
+  </url><url>
+    <loc>https://blog.reinventorofwheel.de/</loc>
+    <lastmod>2025-01-12T10:30:00+02:00</lastmod>
+  </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/38c3/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
@@ -24,12 +30,6 @@
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/kongress/</loc>
-    <lastmod>2025-01-01T01:00:00+01:00</lastmod>
-  </url><url>
-    <loc>https://blog.reinventorofwheel.de/posts/</loc>
-    <lastmod>2025-01-01T01:00:00+01:00</lastmod>
-  </url><url>
-    <loc>https://blog.reinventorofwheel.de/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/</loc>
