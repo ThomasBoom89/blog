@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <title>Golang&#39;s bösartige Module :: ReinventorOfWheel Blog</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="⚠️ ⚠️ ⚠️ Dieser Beitrag dient nur zu Forschungszwecken und zur Lösungsfindung geeigneter Gegenmaßnahmen! ⚠️ ️⚠️ ⚠️
+Einleitung Es gibt momentan, ausgelöst durch die Recherche 1 von Socket eine massive Welle an Blog-Beiträgen, Videos und Podcast über den Fund von Malware in Paketen der Programmiersprache Go. Lasst uns zusammen einmal verstehen was hier genau passiert ist, dann erstellen wir ein proof of concept und klären anschließend, ob alle Anschuldigungen stimmen und welche Lösungswege es gibt.
+"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<meta property="og:url" content="https://blog.reinventorofwheel.de/posts/golang-malicious-modules/">
+  <meta property="og:site_name" content="ReinventorOfWheel Blog">
+  <meta property="og:title" content="Golang&#39;s bösartige Module">
+  <meta property="og:description" content="Wir schauen uns den aktuellen Stand der Go Module Malware an, prüfen Anschuldigungen und finden hoffentlich Lösungsansätze!">
+  <meta property="og:locale" content="de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-21T15:00:05+02:00">
+    <meta property="article:modified_time" content="2025-05-21T15:00:05+02:00">
+    <meta property="article:tag" content="Golang">
+    <meta property="article:tag" content="Security">
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Golang&#39;s bösartige Module">
+  <meta name="twitter:description" content="Wir schauen uns den aktuellen Stand der Go Module Malware an, prüfen Anschuldigungen und finden hoffentlich Lösungsansätze!">
+
+
+<link rel="canonical" href="https://blog.reinventorofwheel.de/posts/golang-malicious-modules/" />
+
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="stylesheet" href="/css/index.min.b33e68a4ff15ca3728f62aab4a64d7e43e69358c14f7eaff4f83fc91381a3839.css">
+
+
+
+
+
+
+
+
+
+  
+
+
+</head>
+<body class="flex flex-col min-h-screen w-full bg-slate-50 dark:bg-gray-800"><header class="flex flex-none justify-center z-10 p-6 bg-slate-50 dark:bg-gray-800 sticky top-0">
+    <div class="flex flex-row gap justify-between w-full max-w-4xl lg:max-w-5xl h-12">
+  <div class="flex-none ml-2 md:ml-0">
+    <a href="/" class="">
+      <img class="h-12 w-12 rounded-full object-cover bg-gray-100" src="/meine-fresse.png" alt="logo">
+    </a>
+  </div>
+  <div class="flex-1"></div>
+  <div class="flex justify-center items-center pr-3">
+    <iframe src="https://github.com/sponsors/ThomasBoom89/button" title="Sponsor ThomasBoom89" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+
+  </div>
+  <div class="flex-none">
+    
+
+
+
+<nav class="h-full static">
+  <button id="navbar-menu-toggle" type="button" class="inline-flex items-center p-2 text-sm text-slate-800 dark:text-slate-200 rounded-lg md:hidden" aria-controls="navbar-menu" aria-expanded="false">
+    <span class="sr-only">Hauptmenü öffnen</span>
+    <i class="w-8 h-8">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu-2" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 6l16 0" />
+  <path d="M4 12l16 0" />
+  <path d="M4 18l16 0" />
+</svg>
+
+    </i>
+  </button>
+  <div class="absolute md:static top-16 left-0 right-0 z-50 hidden w-full md:block md:w-auto" id="navbar-menu">
+    <ul class="flex flex-col mx-2 md:mx-0 md:flex-row md:border-0 rounded-sm md:rounded-full px-3 text-base font-medium text-slate-800 dark:text-slate-200 shadow-lg bg-white dark:bg-gray-600 shadow-slate-800/5 dark:shadow-slate-200/5 ring-1 ring-slate-900/5 dark:ring-slate-100/5">
+    
+        <li id="post" class="">
+          <a class="block px-3 py-3 hover:text-emerald-600 text-emerald-600"
+            href="/posts/" title="Post">Post</a>
+        </li>
+      
+    
+        <li id="about" class="">
+          <a class="block px-3 py-3 hover:text-emerald-600"
+            href="/about/" title="About">About</a>
+        </li>
+      
+    
+    </ul>
+  </div>
+</nav>
+
+
+  </div>
+  
+  <div class="flex-none mx-1"></div>
+  
+  <div class="flex-none md:hidden">
+    <a href=/search/ class="inline-flex items-center p-2 text-sm text-slate-800 dark:text-slate-200 rounded-lg" aria-controls="navbar-menu" aria-expanded="false">
+      <span class="sr-only">Suche</span>
+      <i class="w-8 h-8">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+    <path d="M21 21l-6 -6" />
+</svg>
+
+      </i>
+    </a>
+  </div>
+  <div class="darkmode-toggle flex flex-none mr-2 md:mr-0">
+    <label for="darkmode-toggle" class="flex items-center px-3 cursor-pointer rounded-full bg-gray-100 dark:bg-gray-600" title="Dark Mode umschalten">
+      <input name="darkmode-toggle" id="darkmode-toggle" type="checkbox" class="sr-only peer" aria-label="Dark Mode umschalten">
+      <div class="group flex flex-row gap-1 justify-center h-8 px-1 rounded-full bg-white dark:bg-gray-700">
+        <i class="h-6 w-6 flex-none rounded-full bg-yellow-400 place-self-center peer-checked:group-[]:invisible">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brightness-down" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+   <path d="M12 5l0 .01"></path>
+   <path d="M17 7l0 .01"></path>
+   <path d="M19 12l0 .01"></path>
+   <path d="M17 17l0 .01"></path>
+   <path d="M12 19l0 .01"></path>
+   <path d="M7 17l0 .01"></path>
+   <path d="M5 12l0 .01"></path>
+   <path d="M7 7l0 .01"></path>
+</svg>
+
+        </i>
+        <i class="h-6 w-6 flex-none rounded-full place-self-center invisible peer-checked:group-[]:visible">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon-stars" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+   <path d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"></path>
+   <path d="M19 11h2m-1 -1v2"></path>
+</svg>
+
+        </i>
+      </div>
+    </label>
+  </div>
+</div>
+
+  </header>
+  <main class="flex flex-auto justify-center">
+    
+<div class="w-full max-w-4xl lg:max-w-5xl">
+  <div class="flex flex-col mb-6 mx-2 md:mx-0 rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-700">
+    <div>
+      <a href="/posts/golang-malicious-modules/">
+        <picture>
+    <source type="image/webp" srcset="/posts/golang-malicious-modules/evil-golang_hu_5c24f737998b505a.webp 960w" sizes="(min-width: 1024px) 100vw, 50vw" />
+    <source type="image/jpeg" srcset="/posts/golang-malicious-modules/evil-golang_hu_8a4c44c273cb68b9.jpg 960w" sizes="(min-width: 1024px) 100vw, 50vw" />
+    <img class="w-full object-cover h-36 md:h-48 xl:h-60" src="/posts/golang-malicious-modules/evil-golang_hu_79c74f7bd72d02b0.jpg" width="1400" height="500" alt="Golang&#39;s bösartige Module" title="Golang&#39;s bösartige Module" loading="lazy" />
+  </picture>
+      </a>
+    </div>
+    <div class="flex flex-col gap-y-3 p-6">
+      <h1 class="text-4xl font-semibold text-slate-800 dark:text-slate-100">
+        <a href="/posts/golang-malicious-modules/">Golang&rsquo;s bösartige Module</a>
+      </h1>
+
+      
+      <h2 class="my-4 text-large text-slate-600 dark:text-slate-300">
+        Wir schauen uns den aktuellen Stand der Go Module Malware an, prüfen Anschuldigungen und finden hoffentlich Lösungsansätze!
+      </h2>
+      
+      
+  <ul class="flex flex-row flex-wrap text-slate-500 dark:text-slate-300">
+    
+      
+      <li>
+        <a href="/categories/programmierung/"
+          class="text-sm mr-2 px-2 py-1 rounded border border-emerald-800 bg-emerald-800 text-slate-50">
+          Programmierung
+        </a>
+      </li>
+      
+    
+    
+      
+      <li>
+        <a href="/tags/golang/"
+          class="flex flex-row text-sm mr-2 py-1">
+          <i class="h-5 w-5 flex-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M5 9l14 0"></path>
+   <path d="M5 15l14 0"></path>
+   <path d="M11 4l-4 16"></path>
+   <path d="M17 4l-4 16"></path>
+</svg>
+
+          </i>
+          <span class="ml-0">golang</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/tags/security/"
+          class="flex flex-row text-sm mr-2 py-1">
+          <i class="h-5 w-5 flex-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M5 9l14 0"></path>
+   <path d="M5 15l14 0"></path>
+   <path d="M11 4l-4 16"></path>
+   <path d="M17 4l-4 16"></path>
+</svg>
+
+          </i>
+          <span class="ml-0">security</span>
+        </a>
+      </li>
+      
+    
+  </ul>
+
+
+
+      <div class="flex flex-col gap-y-1 md:flex-row md:gap-y-0 md:gap-x-4 text-slate-500 dark:text-slate-300">
+  
+  
+  <div class="flex flex-row text-base gap-x-1">
+    <i class="h-6 w-6 flex-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+   <path d="M16 3v4"></path>
+   <path d="M8 3v4"></path>
+   <path d="M4 11h16"></path>
+   <path d="M11 15h1"></path>
+   <path d="M12 15v3"></path>
+</svg>
+
+    </i>
+    <time datetime="2025-05-21T15:00:05&#43;02:00">
+      2025-05-21
+    </time>
+  </div>
+
+  <div class="flex flex-row text-base gap-x-1">
+    <i class="h-6 w-6 flex-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hourglass-high" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M6.5 7h11"></path>
+   <path d="M6 20v-2a6 6 0 1 1 12 0v2a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1z"></path>
+   <path d="M6 4v2a6 6 0 1 0 12 0v-2a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1z"></path>
+</svg>
+
+    </i>
+    <span>
+      Lesezeit 9 Minuten
+    </span>
+  </div>
+</div>
+
+
+      
+      
+      <section class="prose prose-slate dark:prose-invert w-full max-w-4xl lg:max-w-5xl mt-6">
+        <h2>Inhaltsverzeichnis</h2>
+        <aside><nav id="TableOfContents">
+  <ul>
+    <li><a href="#einleitung">Einleitung</a></li>
+    <li><a href="#was-ist-passiert">Was ist passiert?</a></li>
+    <li><a href="#proof-of-concept">Proof of concept</a></li>
+    <li><a href="#welche-anschuldigungen-stimmen-denn-nun">Welche Anschuldigungen stimmen denn nun?</a></li>
+    <li><a href="#lösungsvorschläge-aus-dem-internetz">Lösungsvorschläge aus dem Internetz</a></li>
+    <li><a href="#meine-42-cent">Meine 42 Cent</a></li>
+  </ul>
+</nav></aside>
+      </section>
+      
+      
+
+      <article
+        class="mt-6 w-full max-w-4xl lg:max-w-5xl prose prose-slate dark:prose-invert prose-quoteless post-content">
+        <p>⚠️ ⚠️ ⚠️ <strong>Dieser Beitrag dient nur zu Forschungszwecken und zur Lösungsfindung geeigneter Gegenmaßnahmen!</strong> ⚠️ ️⚠️ ⚠️</p>
+<h2 id="einleitung">Einleitung</h2>
+<p>Es gibt momentan, ausgelöst durch die Recherche <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> von Socket eine massive Welle an Blog-Beiträgen, Videos und Podcast
+über den Fund von Malware in Paketen der Programmiersprache Go.
+Lasst uns zusammen einmal verstehen was hier genau passiert ist, dann erstellen wir ein proof of concept und klären
+anschließend, ob alle Anschuldigungen stimmen und welche Lösungswege es gibt.</p>
+<h2 id="was-ist-passiert">Was ist passiert?</h2>
+<p>Bis Stand heute sind in drei verschiedenen Go-Paketen verschleierte Malware gefunden worden.<br>
+Leider wird hier nur davon gesprochen, dass der Scanner von Socket &ldquo;verdächtiges Verhalten&rdquo; bei diesen Paketen geflagged
+hat und es deswegen genauer untersucht wurde. Ich nehme mal an die scrapen auf eine Art und Weise &ldquo;alle&rdquo; öffentlichen
+Go-Pakete, letztendlich wollen die ja ihr Produkt verkaufen. Gerade bei solchen Einträgen bin ich in den letzten Jahren
+vorsichtig bzw. skeptisch da hier oftmals medial versucht wird etwas aufzubauschen, um eine bessere Vermarktung des
+Produkts zu erreichen. Aus diesem Grund versuche ich die Beiträge selber gegenzuprüfen. Ich nehme gleich vorweg, dass
+das hier nicht der Fall ist, sondern dass es sich um ein ernsthaftes Problem handelt, das auf jeden Fall Aufmerksamkeit
+verdient. Es gibt auch keine Zahlen darüber, wie viele Downloads diese Pakete hatten und welchen Schaden sie nun
+wirklich
+angerichtet haben.</p>
+<p>Als zentrales Problem wird das dezentrale Ökosystem von Go angeführt, welches Pakete nur direkt aus ihrer Quelle
+(Git-Repo) installiert. Das hat zur Folge, dass der Name eines Pakets indirekt mehrfach vergeben werden kann.
+Zum Beispiel, kann es das Repository user1/paket und user2/paket geben. Es wird vielleicht klarer, wenn wir hier
+nicht-abstrakte Namen ins Spiel bringen wie z.B. <code>reinventorofwheel/jwt-authentication</code> und
+<code>reinventorofwhel/jwt-authentication</code>. Beides wären valide Pakete und könnten installiert werden.
+Jetzt könnte das &ldquo;falsche&rdquo; Paket sogar ein Clone von dem &ldquo;richtigen&rdquo; Paket sein, indem nur die verschleierte Malware
+hinzugefügt wird. Durch den Typo und durch den Clone würde einem sehr wahrscheinlich nicht auffallen, dass man hier
+ein falsches Paket hinzugefügt hat. Natürlich gibt es schon Hinweise dafür und man sollte seine Abhängigkeiten sowieso
+immer gründlich kontrollieren, nicht wahr?</p>
+<p>Der Vollständigkeit halber, die dort analysierte Malware führt ein wget (Download) aus der ein Script herunterlädt, dass
+automatisch ausgeführt wird und dann die gesamte /dev/sda Partition überschreibt (wenn root Zugriff 😉).</p>
+<p>Der Beitrag beinhaltet auch Lösungsansätze diese werden wir zu einem späteren Zeitpunkt genauer anschauen.</p>
+<h2 id="proof-of-concept">Proof of concept</h2>
+<p>Lasst uns step by step eine eigene malware programmieren (die natürlich nichts Böses macht!).</p>
+<p>Initialisieren eines Go Paketes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//go.mod</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span> <span style="color:#a6e22e">golang_malware_research</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">go</span> <span style="color:#ae81ff">1.24.3</span>
+</span></span></code></pre></div><p>Wir gehen jetzt einfach mal davon aus, dass die ein kopiertes Paket ist. Dies beinhaltet die super tolle Logik die
+jemand anderes unbedingt benötigt.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//logic.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">golang_malware_research</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Whatever</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewWhatever</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">Whatever</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Whatever</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">W</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Whatever</span>) <span style="color:#a6e22e">SayHello</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;WORLD!&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Und nun erstellen wir unser schadhaften Part der einfachheitshalber in einem extra Pfad:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// malware/malware.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">malware</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">simplePrintln</span>() <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;HELLO&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">simple</span> = <span style="color:#a6e22e">simplePrintln</span>()
+</span></span></code></pre></div><p>Dies könnte nun auch ein externes Paket sein, wenn wir in <code>go.mod</code> z.B. unseren Github-Pfad/Repository eintragen würden.
+Damit wäre das Paket, wenn auf öffentlich gestellt für jeden zugänglich.
+Wir machen es uns natürlich wie immer einfach und fügen ein command im selben Projekt hinzu, der dann die Logik aufruft.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// cmd/main.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;golang_malware_research&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">whatever</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">golang_malware_research</span>.<span style="color:#a6e22e">NewWhatever</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">whatever</span>.<span style="color:#a6e22e">SayHello</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Wenn ich das Programm nun baue und dann ausführe, bekomme ich folgende Ausgabe:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>WORLD!
+</span></span></code></pre></div><p>Nun, das hat ja schonmal nicht so ganz geklappt. Meine Faulheit hat dazu geführt das ein wichtiges Detail fehlt.
+Zum einen, kann der malware Code, zu jedem package hinzugefügt werden, solange der Pfad dahin nicht importiert wird,
+wird auch nichts beim Bauen beachtet, bzw. eben auch der malware code nicht ausgeführt.
+Wir importieren nun einfach das malware Paket in dem logic code, ohne dort etwas davon zu nutzen:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// logic.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">golang_malware_research</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;golang_malware_research/malware&#34;</span> <span style="color:#f92672">&lt;-----</span> <span style="color:#a6e22e">NEU</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Whatever</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewWhatever</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">Whatever</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Whatever</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">W</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Whatever</span>) <span style="color:#a6e22e">SayHello</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;WORLD!&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Folgende Ausgabe nach einem erneuten build:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>HELLO
+</span></span><span style="display:flex;"><span>WORLD!
+</span></span></code></pre></div><p><strong>UPSI!</strong><br>
+Das Ganze wäre natürlich unauffälliger, wenn es einfach zwischen realem Code versteckt wäre.
+Interessanterweise, wird bei einem Import das package ausgeführt und <code>var simple = simplePrintln()</code> sorgt dafür, dass
+die Funktion aufgerufen wird. Hier wird klar, welche Reichweite sowas hätte wobei man ja schon <strong>hat</strong> sagen muss.
+Nachdem
+wir das nun in einer sehr kleinen Scope nachstellen konnten, ist denke ich auch die Aussage in der Einleitung klar, hier
+gibt es ein dickes Problem.</p>
+<h2 id="welche-anschuldigungen-stimmen-denn-nun">Welche Anschuldigungen stimmen denn nun?</h2>
+<p>Ich habe ein paar Videos als auch Blog-Beiträge gelesen und bin doch erstaunt gewesen welche Aussagen da im Raum
+standen. Ehrlicherweise war ich mir bei einigen Thesen selber nicht 100%ig sicher, weswegen es mich umso mehr
+interessiert hat, was nun tatsächlich stimmt.</p>
+<ol>
+<li>Go führt den Quellcode automatisch beim Installieren des Paketes aus (go get)
+<ul>
+<li>Hier war ich wohl am meisten irritiert, mein Gefühl sagte mir, dass das nicht stimmt. Doch fühlte ich mich leicht
+verunsichert, weil ich das in unterschiedlichen Formaten gesehen und gehört hatte. Übrigens im Socket-Block steht
+davon überhaupt nichts, generell finde ich den Blog sehr fair und gradlinig! Nun habe ich zusätzlich zu dem
+<code>fmt.Println(HELLO)</code> noch os-commands als auch shell execs wie im &ldquo;Original&rdquo; eingebaut, denn es hätte schon sein
+können, dass beim go get command stdout unterdrückt wird. Trotzdem kann ich von meinen Tests her Entwarnung geben,
+das ließ sich nicht bestätigen!</li>
+</ul>
+</li>
+<li>Go führt den Quellcode automatisch beim Bauen aus
+<ul>
+<li>Ich denke, wir kennen hier die Antwort. Nichtsdestotrotz habe ich das natürlich auch ausprobiert und es hat sich
+durch meine Tests nicht bestätigen lassen. Diese These war für mich persönlich garnicht so abwegig, denn zum
+Beispiel in Rust, gibt es ja auch <code>build.rs</code> welches zum Build ausgeführt wird.</li>
+</ul>
+</li>
+<li>Die Malware wird ausgeführt, wenn man das Programm startet
+<ul>
+<li>Klingt irgendwie nach keiner These, denn das sollte ja der Zweck der Malware sein. Prinzipiell gibt es natürlich
+noch die Möglichkeit von Backdoor o.Ä. die durch ein bestimmten Command dem Webserver oder was auch immer das
+Paket macht übergeben werden kann. Bezug nehmend auf die analysierten Pakete stimmt das ganze hier auch nur halb.
+Wir haben ja gesehen, dass zumindest der Import irgendwo gesetzt sein muss. Wenn es nun zwischen &ldquo;echten&rdquo; Code
+versteckt worden wäre, wäre das auch der Fall. Ich finde trotzdem, dass das eine korrekte Aussage ist.</li>
+</ul>
+</li>
+</ol>
+<p>Hier gibt es aber noch einige versteckte Zusammenhänge, die ich auflösen möchte. Wenn von installieren gesprochen wird,
+kann auch <code>go install</code> gemeint sein, welches im Falle des tlsproxy auch wahrscheinlich ist. Dies scheint dazu geführt zu
+haben, dass es so aufgefasst wurde, als wenn dies als Abhängigkeit passiert. Ich denke, dass dieser Umstand zu
+Verwirrung geführt haben könnte und man es deswegen größer macht als es in dem Fall ist. Denn auch <code>go install</code> führt
+die Applikation nicht direkt aus, sondern macht zusätzlich zu <code>go build</code> noch, dass das Binary danach in das $GOPATH/bin
+Verzeichnis gelegt wird (Oder $GOBIN, wenn deklariert).</p>
+<p>Leider gab es noch ein paar andere Aussagen die aber offensichtlich Ragebait, Clickbait und oder Triggern sollten. Ich
+denke, das Problem ist real genug, dass man hier ernsthaft drüber nachdenken und eine Lösung finden sollte. Aber
+das Internet ist nun mal das Internet und wir ignorieren das an dieser Stelle einfach mal.</p>
+<h2 id="lösungsvorschläge-aus-dem-internetz">Lösungsvorschläge aus dem Internetz</h2>
+<p>Auch hier möchte ich auf einige externe Vorschläge eingehen und meinen Senf dazu geben.</p>
+<ol>
+<li>Go braucht eine zentrale Platform die als Package Registry funktioniert
+<ul>
+<li>Dieser Vorschlag wird am lautesten von allen Seiten verbreitet, in dem Socket-Blog wird dies aber lediglich als
+Grund für die Verbreitung durch Verwirrung angegeben. Ich muss hier zugeben, dass dies wirklich der einzige
+Vorteil einer zentralen Platform ist, allerdings hilft dieser nur in diesem speziellen Fall und deswegen hier die
+Frage ob der Trade-Off das wert wäre. Leider wird an den Meisten stellen von Security Scans usw. gesprochen. Das
+haben die aufgeführten Beispiele wie pypi und npmjs meines Wissens nach aber auch nicht!</li>
+</ul>
+</li>
+<li>Google sollte irgendwas™ tun, um dieses Verhalten zu verhindern
+<ul>
+<li>Leider habe ich dies immer im Zusammenhang mit <code>go install</code> wahr genommen. Hier wird immer davon ausgegangen, dass
+der Quellcode sofort danach automatisch ausgeführt, was nicht stimmt, wie wir hier ja getestet haben. Dennoch
+sehe ich hier auch eine gewisse Verantwortungspflicht bei Google oder dem Golang-Team. Nicht aus dem Grund um
+hier mit dem Finger auf jemanden zu zeigen, sondern weil ich glaube, dass dort deutlich kompetentere Menschen
+sitzen, die bessere Lösungen erarbeiten könnten.</li>
+</ul>
+</li>
+<li>Mehr Code Audits, Analysen und Monitoring
+<ul>
+<li>Ich musste wirklich lange suchen, um wenigstens noch einen Punkt hier rein zu bekommen, den ich auch
+vollumfänglich unterstützen kann. Dieses steht auch so im Socket-Blog und ich empfinde das als einen guten Teil
+wie man solche Probleme in den Griff bekommen kann.</li>
+</ul>
+</li>
+</ol>
+<h2 id="meine-42-cent">Meine 42 Cent</h2>
+<p>Zunächst bin ich erstmal erleichtert, dass sich die teilweise echt schweren Anschuldigungen nicht bewahrheitet haben.
+Allerdings bin ich doch auch erstaunt, wie einfach es ist Code einfach so in einem Package via Import auszuführen!<br>
+Ich nehme das Problem sehr ernst und mache mir auch Gedanken was man dagegen tun kann.</p>
+<ol>
+<li>Bewusstsein
+<ul>
+<li>Grundsätzlich bin ich dafür, dass nicht jeder ein jwt-authentication Paket selber entwickeln sollte, sondern es
+für solche kritischen Pakete es stables in den jeweiligen Programmiersprachen geben sollte. (Und in vielen ja auch
+gibt). Allerdings sollte man schon ein Bewusstsein dafür entwickeln was nun wirklich sinnvoll ist und was nicht
+und vielleicht einige Sachen mehr selber programmieren. Die Geschichte hört hier bei Frameworks auf, weil dort
+niemand die 1600 peer-dependencies prüft was definitiv ein echtes Problem ist.</li>
+</ul>
+</li>
+<li>Sandbox / dedizierte Umgebung
+<ul>
+<li>In dem konkreten Fall ging es um ausführbare Software, dennoch halte ich es für sinnvoll sowohl Entwicklung als
+auch Benutzung von Software zu isolieren (soweit es eben geht). Das kann sowohl durch virtuelle Maschinen erfolgen
+als auch durch Containerisierung.</li>
+</ul>
+</li>
+<li>Programmiersprachen übergreifendes Problem
+<ul>
+<li>Das Einbinden und installieren von Software via Github o.Ä. ist kein Go-spezifisches Problem. Ich denke das hier
+eine generelle Lösung für alle Sprachen und Ökosysteme gefunden werden muss.</li>
+</ul>
+</li>
+<li>Software aus dem Internet
+<ul>
+<li>Ich werde euch nichts Neues erzählen und doch tun wir dies alle. Installiert keine Software aus dem Internet!
+Letztendlich basiert alles auf Vertrauen, aber es gibt natürlich Quellen, denen man mehr vertraut und anderen
+weniger. Hier sollte man genauer hinschauen und im Zweifelsfall erstmal eine Sandbox nutzen.</li>
+</ul>
+</li>
+<li>Public Money
+<ul>
+<li>Damit mehr Code Audits usw. erfolgen können sollten auch Staaten ihren Teil hierzu beitragen und Personal,
+Ressourcen und Geld zur Verfügung stellen. Software geht uns alle etwas an und der Support gerade im Open Source
+Bereich lässt zu wünschen übrig. Hier wünsche ich mir auch ein Umdenken in der Gesellschaft!</li>
+</ul>
+</li>
+<li>Einfach mal das Rad neu erfinden!
+<ul>
+<li>Da ist nichts weiter zuzusagen!</li>
+</ul>
+</li>
+</ol>
+<p><strong>Ich hoffe, Euch hat der Beitrag gefallen und etwas Licht ins Dunkle gebracht. Veränderung fängt bei einem selbst an!</strong></p>
+<p><strong>ReinventoOfWheel</strong></p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://socket.dev/blog/wget-to-wipeout-malicious-go-modules-fetch-destructive-payload" target="_blank" rel="noopener">Socket Blog-Beitrag</a>
+&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+        <hr style="border-color: rgb(0 0 0 );margin-top: 2em;margin-bottom: 2em;"/>
+<h2>Support & Diskussion</h2>
+<iframe src="https://github.com/sponsors/ThomasBoom89/card" title="Sponsor ThomasBoom89" class="w-full h-full"></iframe>
+<br/>
+
+        
+
+
+  
+<script type="text/javascript">
+  (function() {
+    const themeToggle = document.querySelector('.darkmode-toggle input');
+    const light = 'light';
+    const dark = 'dark';
+    let isDark = localStorage.theme === dark || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    let theme = isDark ? dark : light;
+
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    const dataset = {
+        repo: 'ThomasBoom89\/blog',
+        repoId: 'R_kgDOL9CxKg',
+        category: 'Announcements',
+        categoryId: 'DIC_kwDOL9CxKs4CfcCo',
+        mapping: 'pathname',
+        reactionsEnabled: '1',
+        emitMetadata: '0',
+        theme: theme,
+        lang: 'en',
+    };
+    s.src = 'https://giscus.app/client.js';
+    s.crossorigin = 'anonymous';
+    s.async = true;
+    Object.entries(dataset).forEach(function(a) {
+        return s.dataset[a[0]] = a[1];
+    });
+
+    const curScriptElement = document.currentScript;
+    curScriptElement.parentNode.insertBefore(s, curScriptElement);
+
+    function sendMessage(message) {
+      const iframe = document.querySelector('iframe.giscus-frame');
+      
+      if (!iframe) return;
+      iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+    }
+
+    themeToggle.addEventListener('change', function () {
+      if (this.checked) {
+        theme = dark;
+      } else {
+        theme = light;
+      }
+      sendMessage({
+        setConfig: {
+          theme: theme,
+        }
+      });
+    });
+  })();
+</script>
+  
+
+
+      </article>
+    </div>
+  </div>
+</div>
+
+  </main>
+  <footer class="flex flex-none justify-center z-10 bg-slate-50 dark:bg-gray-800 sticky bottom-0 ">
+    <section class="flex flex-col md:flex-row mx-2 md:mx-0 gap-2 md:gap-0 justify-between w-full max-w-4xl lg:max-w-5xl py-6 text-slate-500 dark:text-slate-300">
+  <div class="flex flex-row">
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <a href="https://github.com/ThomasBoom89" target="_blank" title="Github" class="flex flex-row mr-2">
+      <span class="hidden">Github</span>
+      <i class="h-6 w-6 flex-none"> <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path>
+</svg>
+ </i>
+    </a>
+  
+  
+  
+    <a href="https://twitch.tv/reinventorofwheel" target="_blank" title="Twitch" class="flex flex-row mr-2">
+      <span class="hidden">Twitch</span>
+      <i class="h-6 w-6 flex-none"> <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-twitch"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5v11a1 1 0 0 0 1 1h2v4l4 -4h5.584c.266 0 .52 -.105 .707 -.293l2.415 -2.414c.187 -.188 .293 -.442 .293 -.708v-8.585a1 1 0 0 0 -1 -1h-14a1 1 0 0 0 -1 1z" /><path d="M16 8l0 4" /><path d="M12 8l0 4" /></svg> </i>
+    </a>
+  
+  
+  
+    <a href="https://www.youtube.com/@ReinventorOfWheel" target="_blank" title="YouTube" class="flex flex-row mr-2">
+      <span class="hidden">YouTube</span>
+      <i class="h-6 w-6 flex-none"> <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-youtube"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 8a4 4 0 0 1 4 -4h12a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-12a4 4 0 0 1 -4 -4v-8z" /><path d="M10 9l5 3l-5 3z" /></svg> </i>
+    </a>
+  
+  
+
+
+  </div>
+  <div class="grow"></div>
+  <div class="flex flex-row">
+    <i class="h-6 w-6 flex-none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+   <path d="M14 9.75a3.016 3.016 0 0 0 -4.163 .173a2.993 2.993 0 0 0 0 4.154a3.016 3.016 0 0 0 4.163 .173"></path>
+</svg>
+</i> 2024 - 2025 ReinventorOfWheel
+    
+  </div>
+  
+  <div class="flex flex-row">
+    <span class="ml-0 pl-0 md:ml-2 md:pl-2 border-l-0 md:border-l border-slate-300 dark:border-slate-400">
+      Powered by <a href="https://gohugo.io" target="_blank" rel="noopener" class="underline">Hugo</a> <span class="text-red-600">&hearts;</span> <a href="https://github.com/tomowang/hugo-theme-tailwind" target="_blank" rel="noopener" class="underline">Tailwind</a>
+    </span>
+  </div>
+  
+</section>
+
+  </footer>
+  <script src="/main.min.c6372b6836971865bd94bfde974748aca8415824a2facab6ccd66a87384bfacb.js"></script>
+
+<div class="hidden top-1 right-1" id="code-copy">
+  <i class="h-6 w-6 block">
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+  <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+</svg>
+
+  </i>
+</div>
+<div class="hidden top-1 right-1" id="code-copy-done">
+  <i class="h-6 w-6 block">
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l5 5l10 -10" />
+</svg>
+
+  </i>
+</div><script src="/code-copy.min.e7b2a74adef1ed474c335c8bd5e7832b2316b8842b0f9184d65286c5bd64f51a.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
-  <title>Chaos :: ReinventorOfWheel Blog</title>
+  <title>Golang :: ReinventorOfWheel Blog</title>
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,18 +14,18 @@
   content=""
 />
 <meta name="robots" content="noodp" />
-<meta property="og:url" content="https://blog.reinventorofwheel.de/tags/chaos/">
+<meta property="og:url" content="https://blog.reinventorofwheel.de/tags/golang/">
   <meta property="og:site_name" content="ReinventorOfWheel Blog">
-  <meta property="og:title" content="Chaos">
+  <meta property="og:title" content="Golang">
   <meta property="og:locale" content="de">
   <meta property="og:type" content="website">
 
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Chaos">
+  <meta name="twitter:title" content="Golang">
 
 
-<link rel="canonical" href="https://blog.reinventorofwheel.de/tags/chaos/" />
+<link rel="canonical" href="https://blog.reinventorofwheel.de/tags/golang/" />
 
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/css/index.min.b33e68a4ff15ca3728f62aab4a64d7e43e69358c14f7eaff4f83fc91381a3839.css">
@@ -158,22 +158,22 @@
         
           <article class="flex flex-col mb-6 mx-2 md:mx-0 rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-700">
             <div>
-              <a href="/posts/38c3-recap/">
+              <a href="/posts/golang-malicious-modules/">
                 <picture>
-    <source type="image/webp" srcset="/posts/38c3-recap/head_hu_53882ed394882ee6.webp 960w, /posts/38c3-recap/head_hu_da13293c95a31fbd.webp 1600w" sizes="(min-width: 1024px) 100vw, 50vw" />
-    <source type="image/jpeg" srcset="/posts/38c3-recap/head_hu_a4745fd9f2d22274.jpg 960w, /posts/38c3-recap/head_hu_6f43ac87f08f7229.jpg 1600w" sizes="(min-width: 1024px) 100vw, 50vw" />
-    <img class="w-full object-cover h-36 md:h-48 xl:h-60" src="/posts/38c3-recap/head_hu_be31eadfd4565458.jpg" width="2024" height="477" alt="38C3 Recap" title="38C3 Recap" loading="lazy" />
+    <source type="image/webp" srcset="/posts/golang-malicious-modules/evil-golang_hu_5c24f737998b505a.webp 960w" sizes="(min-width: 1024px) 100vw, 50vw" />
+    <source type="image/jpeg" srcset="/posts/golang-malicious-modules/evil-golang_hu_8a4c44c273cb68b9.jpg 960w" sizes="(min-width: 1024px) 100vw, 50vw" />
+    <img class="w-full object-cover h-36 md:h-48 xl:h-60" src="/posts/golang-malicious-modules/evil-golang_hu_79c74f7bd72d02b0.jpg" width="1400" height="500" alt="Golang&#39;s bösartige Module" title="Golang&#39;s bösartige Module" loading="lazy" />
   </picture>
               </a>
             </div>
             <div class="flex flex-col gap-y-3 p-6">
               <h2 class="text-4xl font-semibold text-slate-800 dark:text-slate-200">
-                <a href="/posts/38c3-recap/">38C3 Recap</a>
+                <a href="/posts/golang-malicious-modules/">Golang&rsquo;s bösartige Module</a>
               </h2>
 
               
   <div class="my-4 text-large text-slate-600 dark:text-slate-300">
-    Ein kleiner Recap vom 38C3 mit Talk-Empfehlungen
+    Wir schauen uns den aktuellen Stand der Go Module Malware an, prüfen Anschuldigungen und finden hoffentlich Lösungsansätze!
   </div>
 
 
@@ -182,9 +182,9 @@
     
       
       <li>
-        <a href="/categories/ccc/"
+        <a href="/categories/programmierung/"
           class="text-sm mr-2 px-2 py-1 rounded border border-emerald-800 bg-emerald-800 text-slate-50">
-          CCC
+          Programmierung
         </a>
       </li>
       
@@ -192,7 +192,7 @@
     
       
       <li>
-        <a href="/tags/38c3/"
+        <a href="/tags/golang/"
           class="flex flex-row text-sm mr-2 py-1">
           <i class="h-5 w-5 flex-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -204,12 +204,12 @@
 </svg>
 
           </i>
-          <span class="ml-0">38C3</span>
+          <span class="ml-0">golang</span>
         </a>
       </li>
       
       <li>
-        <a href="/tags/ccc/"
+        <a href="/tags/security/"
           class="flex flex-row text-sm mr-2 py-1">
           <i class="h-5 w-5 flex-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -221,58 +221,7 @@
 </svg>
 
           </i>
-          <span class="ml-0">CCC</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/tags/konferenz/"
-          class="flex flex-row text-sm mr-2 py-1">
-          <i class="h-5 w-5 flex-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <path d="M5 9l14 0"></path>
-   <path d="M5 15l14 0"></path>
-   <path d="M11 4l-4 16"></path>
-   <path d="M17 4l-4 16"></path>
-</svg>
-
-          </i>
-          <span class="ml-0">Konferenz</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/tags/kongress/"
-          class="flex flex-row text-sm mr-2 py-1">
-          <i class="h-5 w-5 flex-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <path d="M5 9l14 0"></path>
-   <path d="M5 15l14 0"></path>
-   <path d="M11 4l-4 16"></path>
-   <path d="M17 4l-4 16"></path>
-</svg>
-
-          </i>
-          <span class="ml-0">Kongress</span>
-        </a>
-      </li>
-      
-      <li>
-        <a href="/tags/chaos/"
-          class="flex flex-row text-sm mr-2 py-1">
-          <i class="h-5 w-5 flex-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <path d="M5 9l14 0"></path>
-   <path d="M5 15l14 0"></path>
-   <path d="M11 4l-4 16"></path>
-   <path d="M17 4l-4 16"></path>
-</svg>
-
-          </i>
-          <span class="ml-0">Chaos</span>
+          <span class="ml-0">security</span>
         </a>
       </li>
       
@@ -297,8 +246,8 @@
 </svg>
 
     </i>
-    <time datetime="2025-01-01T01:00:00&#43;01:00">
-      2025-01-01
+    <time datetime="2025-05-21T15:00:05&#43;02:00">
+      2025-05-21
     </time>
   </div>
 
@@ -313,7 +262,7 @@
 
     </i>
     <span>
-      Lesezeit 3 Minuten
+      Lesezeit 9 Minuten
     </span>
   </div>
 </div>

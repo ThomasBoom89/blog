@@ -2,11 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog.reinventorofwheel.de/categories/</loc>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
+  </url><url>
+    <loc>https://blog.reinventorofwheel.de/tags/golang/</loc>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
+  </url><url>
+    <loc>https://blog.reinventorofwheel.de/posts/golang-malicious-modules/</loc>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
+  </url><url>
     <loc>https://blog.reinventorofwheel.de/posts/</loc>
-    <lastmod>2025-01-12T10:30:00+02:00</lastmod>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
+  </url><url>
+    <loc>https://blog.reinventorofwheel.de/categories/programmierung/</loc>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/</loc>
-    <lastmod>2025-01-12T10:30:00+02:00</lastmod>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
+  </url><url>
+    <loc>https://blog.reinventorofwheel.de/tags/security/</loc>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
+  </url><url>
+    <loc>https://blog.reinventorofwheel.de/tags/</loc>
+    <lastmod>2025-05-21T15:00:05+02:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/38c3/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
@@ -14,13 +32,10 @@
     <loc>https://blog.reinventorofwheel.de/posts/38c3-recap/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
-    <loc>https://blog.reinventorofwheel.de/categories/</loc>
+    <loc>https://blog.reinventorofwheel.de/categories/ccc/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/ccc/</loc>
-    <lastmod>2025-01-01T01:00:00+01:00</lastmod>
-  </url><url>
-    <loc>https://blog.reinventorofwheel.de/categories/ccc/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/chaos/</loc>
@@ -30,9 +45,6 @@
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/kongress/</loc>
-    <lastmod>2025-01-01T01:00:00+01:00</lastmod>
-  </url><url>
-    <loc>https://blog.reinventorofwheel.de/tags/</loc>
     <lastmod>2025-01-01T01:00:00+01:00</lastmod>
   </url><url>
     <loc>https://blog.reinventorofwheel.de/tags/first/</loc>

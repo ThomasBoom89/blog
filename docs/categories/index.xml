@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>de</language>
     <copyright>ReinventorOfWheel</copyright>
-    <lastBuildDate>Wed, 01 Jan 2025 01:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 21 May 2025 15:00:05 +0200</lastBuildDate>
     <atom:link href="https://blog.reinventorofwheel.de/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Programmierung</title>
+      <link>https://blog.reinventorofwheel.de/categories/programmierung/</link>
+      <pubDate>Wed, 21 May 2025 15:00:05 +0200</pubDate>
+      <guid>https://blog.reinventorofwheel.de/categories/programmierung/</guid>
+      <description></description>
+    </item>
     <item>
       <title>CCC</title>
       <link>https://blog.reinventorofwheel.de/categories/ccc/</link>
